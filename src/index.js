@@ -2,48 +2,11 @@ import Vue from 'vue/dist/vue.js';
 import semantic from '../semantic/semantic.js';
 import '../semantic/semantic.css';
 
-function initQuestionMatrix(initData) {
-  var __products = [
-    {
-      name: 'SkullCandy Blazin\' Buds',
-      attributes: {
-        'Price': '$250',
-        'Rating': '3/5',
-        '# Ratings': '359',
-        'Colour': 'Red'
-      }
-    },
-    {
-      name: 'Bose QuietComfort 25',
-      attributes: {
-        'Price': '$350',
-        'Rating': '4/5',
-        '# Ratings': '359',
-        'Colour': 'Blue'
-      }
-    },
-  ]
+function initQuestionMatrix(config) {
 
-  var __tasks = [
-    {
-      "Question": "",
-      "Answers": "",
-      "Tokens": "1",
-      "Hidden": "No"
-    },
-    {
-      "Question": "The cow jumped over the ____",
-      "Answers": "moon, Moon",
-      "Tokens": "1",
-      "Hidden": "No"
-    },
-    {
-      "Question": "What is the colour of the sky?",
-      "Answers": "blue, Blue, black, Black",
-      "Tokens": "2",
-      "Hidden": "Yes"
-    }
-  ]
+    var products = config.products;
+    var tasks = config.tasks;
+    var noTaskMode = config.noTaskMode;
 
   Vue.component('product-attribute-row', {
     props: ['attribute', 'unlockedMap', 'unlockAttribute'],
@@ -119,7 +82,7 @@ function initQuestionMatrix(initData) {
       }
     },
     created() {
-      if (this.taskInstance.Question.trim().length == 0)
+      if (this.taskInstance.Question && this.taskInstance.Question.trim().length == 0)
         this.incrementTasksDone();
     },
     computed: {
