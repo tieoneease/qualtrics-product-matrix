@@ -4,11 +4,53 @@
     <meta charset="UTF-8">
     <title>Vue it up</title>
     <script src="matrix-bundle.js?123"></script>
-    <script>
-      document.addEventListener("DOMContentLoaded", initQuestionMatrix);
-    </script>
   </head>
   <body>
     <div id="question-matrix-app"/>
+    <script>
+initQuestionMatrix({
+  "products": [
+    {
+      "name": "Skullcandy Blazin' Buds",
+      "attributes": {
+        "Price": "$250",
+        "Ratings": "3.5/5",
+        "# of Ratings": "359",
+        "Colour": "Blue"
+      }
+    },
+    {
+      "name": "Bose QuietComfort 25",
+      "attributes": {
+        "Price": "$350",
+        "Ratings": "4/5",
+        "# of Ratings": "1402",
+        "Colour": "Red"
+      }
+    }
+  ],
+  "tasks": [
+    {
+      "Question": "",
+      "Answers": "",
+      "Tokens": "1",
+      "Hidden": "no"
+    },
+    {
+      "Question": "",
+      "Answers": "",
+      "Tokens": "1",
+      "Hidden": "no"
+    },
+    {
+      "Question": "",
+      "Answers": "",
+      "Tokens": "2",
+      "Hidden": "yes"
+    }
+  ],
+  "noTaskMode": true
+});
+    </script>
   </body>
 </html>

@@ -1,6 +1,23 @@
 import Vue from 'vue/dist/vue.js';
-import semantic from '../semantic/semantic.js';
-import '../semantic/semantic.css';
+
+import '../semantic/components/reset.min.css';
+import '../semantic/components/site.min.css';
+import '../semantic/components/container.min.css';
+import '../semantic/components/grid.min.css';
+import '../semantic/components/input.min.css';
+import '../semantic/components/label.min.css';
+import '../semantic/components/table.min.css';
+import '../semantic/components/icon.min.css';
+import '../semantic/components/card.min.css';
+import '../semantic/components/button.min.css';
+import '../semantic/components/transition.min.css';
+import '../semantic/components/dimmer.min.css';
+import '../semantic/components/modal.min.css';
+
+import '../semantic/components/site.min.js';
+import '../semantic/components/transition.min.js';
+import '../semantic/components/dimmer.min.js';
+import '../semantic/components/modal.min.js';
 
 function initQuestionMatrix(config) {
 
@@ -34,7 +51,7 @@ function initQuestionMatrix(config) {
     props: ['unlockedMap', 'unlockAttribute'],
     data: function () {
       return {
-        products: __products
+        products: products
       }
     },
     computed: {
@@ -82,7 +99,7 @@ function initQuestionMatrix(config) {
       }
     },
     created() {
-      if (this.taskInstance.Question && this.taskInstance.Question.trim().length == 0)
+      if (!noTaskMode && this.taskInstance.Question.trim().length == 0)
         this.incrementTasksDone();
     },
     computed: {
@@ -137,6 +154,10 @@ function initQuestionMatrix(config) {
 
         if (this.redeemableTokens == 0)
           this.doneRedeeming = true;
+
+          if (noTaskMode) {
+              this.incrementTasksDone();
+          }
       },
       startTask() {
         if (this.doneRedeeming)
@@ -175,7 +196,7 @@ function initQuestionMatrix(config) {
     props: ['setUnlockable', 'renderTask', 'numTasksDone', 'incrementTasksDone'],
     data() {
       return {
-        tasks: __tasks
+        tasks: tasks
       }
     },
     computed: {
@@ -332,4 +353,5 @@ function initQuestionMatrix(config) {
   })
 }
 
+global.initQuestionMatrix = initQuestionMatrix;
 window.initQuestionMatrix = initQuestionMatrix;
