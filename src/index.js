@@ -21,9 +21,15 @@ import '../semantic/components/modal.min.js';
 
 function initQuestionMatrix(config) {
 
-    var products = config.products;
-    var tasks = config.tasks;
-    var noTaskMode = config.noTaskMode;
+    const products = config.products;
+    const tasks = config.tasks;
+    const noTaskMode = config.noTaskMode;
+    const rankingMode = config.rankingMode;
+
+    const thisInstance = config.thisInstance;
+    const engineInstance = config.engineInstance;
+
+    var unlockOrder = '';
 
   Vue.component('product-attribute-row', {
     props: ['attribute', 'unlockedMap', 'unlockAttribute'],
@@ -95,7 +101,9 @@ function initQuestionMatrix(config) {
         taskTokens: parseInt(this.task.Tokens),
         redeemableTokens: 0,
         currentlyRedeeming: false,
-        doneRedeeming: false
+        doneRedeeming: false,
+          taskAttempts: 0,
+          taskStartTime: null
       }
     },
     created() {
@@ -163,11 +171,25 @@ function initQuestionMatrix(config) {
         if (this.doneRedeeming)
           return;
 
+          this.taskAttempts++;
+          this.taskStartTime = new Date();
+
         this.renderTask(this);
       },
       validateAnswer(answer) {
         if (this.answers.has(answer)) {
           this.redeemableTokens = this.taskTokens;
+
+            const taskKeyPrefix = 'task' + (this.index + 1);
+            const attemptsKey = taskKeyPrefix + 'attempts';
+            const timeSpentKey = taskKeyPrefix + 'time';
+
+            let taskEndTime = new Date();
+            let timeSpent = (taskEndTime - this.taskStartTime) / 1000;
+
+            engineInstance.setEmbeddedData(attemptsKey, this.taskAttempts);
+            engineInstance.setEmbeddedData(timeSpentKey, timeSpent);
+
           return true;
         }
 
@@ -332,6 +354,16 @@ function initQuestionMatrix(config) {
           this.unlockedMap = Object.assign({[attributeName]: true}, this.unlockedMap);
           this.redeemingTask.finishRedeeming();
           this.unlockable = false;
+
+            let unlockOrderArray = unlockOrder.length > 0 ? unlockOrder.split(',') : [];
+            unlockOrderArray.push(attributeName);
+            unlockOrder = unlockOrderArray.join();
+            engineInstance.setEmbeddedData('unlockOrder', unlockOrder);
+
+            if (rankingMode) {
+                let currentRank = unlockOrderArray.length;
+                thisInstance.setChoiceValueByVariableName(attributeName, currentRank);
+            }
         }
       },
       setUnlockable: function(redeemingTask) {
