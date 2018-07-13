@@ -25,6 +25,7 @@ function initQuestionMatrix(config) {
     const tasks = config.tasks;
     const noTaskMode = config.noTaskMode;
     const rankingMode = config.rankingMode;
+    const tasksBelowMatrix = config.tasksBelowMatrix;
 
     const thisInstance = config.thisInstance;
     const engineInstance = config.engineInstance;
@@ -237,7 +238,7 @@ function initQuestionMatrix(config) {
       }
     },
     template: `
-      <div class="ui cards">
+      <div class="ui four stackable cards">
           <task-card
             v-for="(task, index) in tasks"
             v-bind:task="task"
@@ -320,7 +321,8 @@ function initQuestionMatrix(config) {
       redeemingTask: {},
       taskActive: false,
       openTask: {},
-      numTasksDone: 0
+      numTasksDone: 0,
+        tasksBelowMatrix: tasksBelowMatrix
     },
     template: `
       <div>
@@ -332,19 +334,40 @@ function initQuestionMatrix(config) {
         >
         </task-modal>
         <div class="ui stackable very relaxed grid container">
-          <div class="twelve wide column">
-            <product-table
-              v-bind:unlockedMap="unlockedMap"
-              v-bind:unlockAttribute="unlockAttribute"/>
-          </div>
-          <div class="four wide column">
-            <task-cards
-                v-bind:setUnlockable="setUnlockable"
-                v-bind:renderTask="renderTask"
-                v-bind:numTasksDone="numTasksDone"
-                v-bind:incrementTasksDone="incrementTasksDone"
-            />
-          </div>
+            <template v-if="tasksBelowMatrix">
+              <div class="row">
+                  <div class="column">
+                    <product-table
+                      v-bind:unlockedMap="unlockedMap"
+                      v-bind:unlockAttribute="unlockAttribute"/>
+                  </div>
+              </div>
+              <div class="row">
+                  <div class="column">
+                    <task-cards
+                        v-bind:setUnlockable="setUnlockable"
+                        v-bind:renderTask="renderTask"
+                        v-bind:numTasksDone="numTasksDone"
+                        v-bind:incrementTasksDone="incrementTasksDone"
+                    />
+                  </div>
+              </div>
+            </template>
+          <template v-else>
+              <div class="doubling twelve wide column">
+                <product-table
+                  v-bind:unlockedMap="unlockedMap"
+                  v-bind:unlockAttribute="unlockAttribute"/>
+              </div>
+              <div class="doubling four wide column">
+                <task-cards
+                    v-bind:setUnlockable="setUnlockable"
+                    v-bind:renderTask="renderTask"
+                    v-bind:numTasksDone="numTasksDone"
+                    v-bind:incrementTasksDone="incrementTasksDone"
+                />
+              </div>
+          </template>
         </div>
       </div>
     `,
