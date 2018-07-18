@@ -357,7 +357,8 @@ function initQuestionMatrix(config) {
               <div class="doubling twelve wide column">
                 <product-table
                   v-bind:unlockedMap="unlockedMap"
-                  v-bind:unlockAttribute="unlockAttribute"/>
+                  v-bind:unlockAttribute="unlockAttribute"
+                />
               </div>
               <div class="doubling four wide column">
                 <task-cards
